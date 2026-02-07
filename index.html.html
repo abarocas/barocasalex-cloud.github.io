@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Small Town Donations</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue-deep: #1B4965;
+  --blue-mid: #3E8BC6;
+  --blue-light: #62B6E7;
+  --blue-sky: #BEE3F8;
+  --blue-pale: #E8F4FD;
+  --green-deep: #1B6B4A;
+  --green-mid: #2D9D6E;
+  --green-light: #4ADE80;
+  --green-pale: #DCFCE7;
+  --orange-deep: #C2410C;
+  --orange-mid: #EA6D2F;
+  --orange-light: #FB923C;
+  --orange-pale: #FFF3E0;
+  --cream: #FFFDF7;
+  --warm-white: #FFF9F0;
+  --dark: #1A2332;
+  --gray-mid: #64748B;
+  --gray-light: #94A3B8;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--cream);
+  color: var(--dark);
+  overflow-x: hidden;
+}
+
+/* ============ ANIMATED BACKGROUND ============ */
+.bg-clouds {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.cloud {
+  position: absolute;
+  background: white;
+  border-radius: 100px;
+  opacity: 0.25;
+  animation: drift linear infinite;
+}
+.cloud::before, .cloud::after {
+  content: '';
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+}
+.cloud:nth-child(1) { width: 200px; height: 50px; top: 8%; animation-duration: 45s; }
+.cloud:nth-child(1)::before { width: 80px; height: 80px; top: -40px; left: 30px; }
+.cloud:nth-child(1)::after { width: 60px; height: 60px; top: -30px; right: 30px; }
+.cloud:nth-child(2) { width: 160px; height: 40px; top: 18%; animation-duration: 55s; animation-delay: -15s; }
+.cloud:nth-child(2)::before { width: 60px; height: 60px; top: -30px; left: 25px; }
+.cloud:nth-child(2)::after { width: 50px; height: 50px; top: -25px; right: 20px; }
+.cloud:nth-child(3) { width: 240px; height: 55px; top: 30%; animation-duration: 60s; animation-delay: -30s; opacity: 0.15; }
+.cloud:nth-child(3)::before { width: 90px; height: 90px; top: -45px; left: 40px; }
+.cloud:nth-child(3)::after { width: 70px; height: 70px; top: -35px; right: 35px; }
+
+@keyframes drift {
+  from { transform: translateX(-300px); }
+  to { transform: translateX(calc(100vw + 300px)); }
+}
+
+/* ============ NAVIGATION ============ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(27, 73, 101, 0.92);
+  backdrop-filter: blur(12px);
+  padding: 0 2rem;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+}
+.nav-brand {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: white;
+  letter-spacing: 0.5px;
+}
+.nav-brand span { color: var(--orange-light); }
+.nav-links {
+  display: flex;
+  gap: 0.25rem;
+  list-style: none;
+}
+.nav-links a {
+  color: var(--blue-sky);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 100px;
+  transition: all 0.25s;
+  letter-spacing: 0.3px;
+}
+.nav-links a:hover {
+  background: rgba(255,255,255,0.15);
+  color: white;
+}
+.nav-links .cta-link {
+  background: var(--orange-mid);
+  color: white;
+}
+.nav-links .cta-link:hover {
+  background: var(--orange-light);
+  transform: scale(1.05);
+}
+
+/* ============ HERO ============ */
+.hero {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 100px 2rem 60px;
+  background: linear-gradient(180deg, var(--blue-deep) 0%, var(--blue-mid) 40%, var(--blue-sky) 75%, var(--cream) 100%);
+  overflow: hidden;
+}
+
+/* Skyline SVG inspired by the hand-drawn logo */
+.hero-skyline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 280px;
+  z-index: 1;
+}
+
+.logo-container {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 1.5rem;
+  animation: logoFloat 4s ease-in-out infinite;
+}
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.logo-svg {
+  width: 220px;
+  height: 220px;
+  filter: drop-shadow(0 8px 32px rgba(0,0,0,0.25));
+}
+
+.hero-title {
+  font-family: 'Fredoka', sans-serif;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 700;
+  color: white;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+.hero-title .accent { color: var(--orange-light); }
+
+.hero-subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.35rem);
+  color: var(--blue-pale);
+  max-width: 580px;
+  margin: 0 auto 2rem;
+  line-height: 1.6;
+  font-weight: 600;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.9rem 2rem;
+  border-radius: 100px;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+.btn:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+.btn:active { transform: translateY(0) scale(0.98); }
+
+.btn-orange { background: var(--orange-mid); color: white; }
+.btn-orange:hover { background: var(--orange-light); }
+.btn-green { background: var(--green-mid); color: white; }
+.btn-green:hover { background: var(--green-light); color: var(--dark); }
+.btn-outline { background: transparent; color: white; border: 2.5px solid rgba(255,255,255,0.5); }
+.btn-outline:hover { background: rgba(255,255,255,0.15); border-color: white; }
+
+/* Impact ticker */
+.impact-ticker {
+  display: flex;
+  gap: 2.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 2.5rem;
+  position: relative;
+  z-index: 2;
+}
+.ticker-item {
+  text-align: center;
+}
+.ticker-number {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--orange-light);
+  line-height: 1;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+.ticker-label {
+  font-size: 0.85rem;
+  color: var(--blue-pale);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 0.25rem;
+}
+
+/* ============ SECTION STYLES ============ */
+section {
+  position: relative;
+  z-index: 1;
+  padding: 5rem 2rem;
+}
+
+.section-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-tag {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--orange-mid);
+  margin-bottom: 0.5rem;
+}
+
+.section-title {
+  font-family: 'Fredoka', sans-serif;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 700;
+  color: var(--blue-deep);
+  margin-bottom: 1rem;
+  line-height: 1.15;
+}
+.section-title .green { color: var(--green-deep); }
+.section-title .orange { color: var(--orange-mid); }
+
+.section-desc {
+  font-size: 1.1rem;
+  color: var(--gray-mid);
+  max-width: 650px;
+  line-height: 1.7;
+  font-weight: 600;
+}
+
+/* ============ CHARITY OF THE MONTH ============ */
+.charity-section {
+  background: linear-gradient(135deg, var(--green-pale) 0%, var(--blue-pale) 100%);
+}
+
+.charity-spotlight {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 3rem;
+  margin-top: 2.5rem;
+  align-items: center;
+}
+
+.charity-card {
+  background: white;
+  border-radius: 24px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 40px rgba(27, 73, 101, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+.charity-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--green-mid), var(--blue-mid), var(--orange-mid));
+}
+
+.charity-badge {
+  display: inline-block;
+  background: var(--orange-pale);
+  color: var(--orange-deep);
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.35rem 1rem;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+}
+
+.charity-name {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--blue-deep);
+  margin-bottom: 0.75rem;
+}
+
+.charity-desc {
+  color: var(--gray-mid);
+  line-height: 1.7;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.charity-progress {
+  margin-bottom: 1.5rem;
+}
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--blue-deep);
+  margin-bottom: 0.5rem;
+}
+.progress-bar {
+  height: 14px;
+  background: var(--blue-pale);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green-mid), var(--green-light));
+  border-radius: 100px;
+  width: 68%;
+  animation: progressGrow 2s ease-out;
+}
+@keyframes progressGrow { from { width: 0; } }
+
+/* Nominate form */
+.nominate-box {
+  background: white;
+  border-radius: 24px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 40px rgba(27, 73, 101, 0.1);
+}
+.nominate-box h3 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.4rem;
+  color: var(--blue-deep);
+  margin-bottom: 0.5rem;
+}
+.nominate-box p {
+  color: var(--gray-mid);
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+.form-group label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--blue-deep);
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.form-group input, .form-group textarea, .form-group select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2.5px solid var(--blue-sky);
+  border-radius: 14px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--dark);
+  background: var(--blue-pale);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+  border-color: var(--blue-mid);
+  box-shadow: 0 0 0 4px rgba(62, 139, 198, 0.15);
+}
+.form-group textarea { resize: vertical; min-height: 80px; }
+
+/* ============ ABOUT / FOUNDERS ============ */
+.about-section {
+  background: var(--warm-white);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 3rem;
+  margin-top: 2.5rem;
+  align-items: start;
+}
+
+.about-text {
+  font-size: 1.05rem;
+  color: var(--gray-mid);
+  line-height: 1.8;
+  font-weight: 600;
+}
+.about-text p + p { margin-top: 1rem; }
+
+.founders-grid {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.founder-card {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  background: white;
+  border-radius: 20px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.founder-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+}
+
+.founder-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: white;
+  flex-shrink: 0;
+}
+.founder-avatar.blue { background: linear-gradient(135deg, var(--blue-mid), var(--blue-deep)); }
+.founder-avatar.green { background: linear-gradient(135deg, var(--green-mid), var(--green-deep)); }
+.founder-avatar.orange { background: linear-gradient(135deg, var(--orange-mid), var(--orange-deep)); }
+
+.founder-info h4 {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--blue-deep);
+}
+.founder-info .role {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--orange-mid);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.founder-info .bio {
+  font-size: 0.9rem;
+  color: var(--gray-mid);
+  line-height: 1.5;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+
+/* ============ VIPs ============ */
+.vip-section {
+  background: linear-gradient(135deg, var(--blue-deep) 0%, #0F3049 100%);
+  color: white;
+}
+.vip-section .section-tag { color: var(--orange-light); }
+.vip-section .section-title { color: white; }
+.vip-section .section-desc { color: var(--blue-sky); }
+
+.vip-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+}
+
+.vip-card {
+  background: rgba(255,255,255,0.07);
+  border: 2px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 1.75rem;
+  text-align: center;
+  transition: all 0.3s;
+  backdrop-filter: blur(5px);
+}
+.vip-card:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: var(--orange-light);
+  transform: translateY(-4px);
+}
+
+.vip-star {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.vip-name {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: white;
+  margin-bottom: 0.2rem;
+}
+.vip-role {
+  font-size: 0.8rem;
+  color: var(--blue-sky);
+  font-weight: 600;
+}
+
+/* ============ CHARITIES WE SUPPORT ============ */
+.charities-section {
+  background: var(--cream);
+}
+
+.charities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.charity-support-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  border-left: 5px solid;
+  transition: transform 0.3s, box-shadow 0.3s;
+  position: relative;
+}
+.charity-support-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+}
+.charity-support-card:nth-child(1) { border-color: var(--blue-mid); }
+.charity-support-card:nth-child(2) { border-color: var(--green-mid); }
+.charity-support-card:nth-child(3) { border-color: var(--orange-mid); }
+.charity-support-card:nth-child(4) { border-color: var(--blue-light); }
+.charity-support-card:nth-child(5) { border-color: var(--green-light); }
+.charity-support-card:nth-child(6) { border-color: var(--orange-light); }
+
+.charity-support-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+.charity-support-card:nth-child(1) .charity-support-icon { background: var(--blue-pale); }
+.charity-support-card:nth-child(2) .charity-support-icon { background: var(--green-pale); }
+.charity-support-card:nth-child(3) .charity-support-icon { background: var(--orange-pale); }
+.charity-support-card:nth-child(4) .charity-support-icon { background: var(--blue-pale); }
+.charity-support-card:nth-child(5) .charity-support-icon { background: var(--green-pale); }
+.charity-support-card:nth-child(6) .charity-support-icon { background: var(--orange-pale); }
+
+.charity-support-name {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--blue-deep);
+  margin-bottom: 0.4rem;
+}
+.charity-support-desc {
+  font-size: 0.95rem;
+  color: var(--gray-mid);
+  line-height: 1.6;
+  font-weight: 600;
+}
+.charity-month-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 0.2rem 0.75rem;
+  border-radius: 100px;
+  background: var(--green-pale);
+  color: var(--green-deep);
+  margin-top: 0.75rem;
+}
+
+/* ============ FOOTER ============ */
+footer {
+  position: relative;
+  z-index: 1;
+  background: var(--blue-deep);
+  color: var(--blue-sky);
+  padding: 3rem 2rem 2rem;
+}
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+.footer-brand {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: white;
+}
+.footer-brand span { color: var(--orange-light); }
+.footer-links {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+}
+.footer-links a {
+  color: var(--blue-sky);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: white; }
+.footer-copy {
+  width: 100%;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--gray-light);
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+/* ============ CONFETTI ============ */
+.confetti-piece {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  top: -20px;
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ============ SCROLL ANIMATIONS ============ */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 768px) {
+  .charity-spotlight { grid-template-columns: 1fr; }
+  .about-grid { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+  .impact-ticker { gap: 1.5rem; }
+  .ticker-number { font-size: 2rem; }
+  .hero { padding-bottom: 120px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Animated clouds -->
+<div class="bg-clouds">
+  <div class="cloud"></div>
+  <div class="cloud"></div>
+  <div class="cloud"></div>
+</div>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-brand">Small<span>Town</span>Donations</div>
+  <ul class="nav-links">
+    <li><a href="#charity">Charity of the Month</a></li>
+    <li><a href="#about">About Us</a></li>
+    <li><a href="#vips">VIPs</a></li>
+    <li><a href="#charities">Charities</a></li>
+    <li><a href="#nominate" class="cta-link">Nominate!</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <!-- SVG Logo inspired by the hand-drawn skyline -->
+  <div class="logo-container">
+    <svg class="logo-svg" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Circle background -->
+      <circle cx="110" cy="110" r="108" fill="white" fill-opacity="0.15" stroke="white" stroke-width="3" stroke-opacity="0.3"/>
+      <!-- Left building -->
+      <rect x="30" y="90" width="35" height="75" rx="4" fill="white" fill-opacity="0.9"/>
+      <rect x="36" y="98" width="10" height="10" rx="2" fill="#3E8BC6" fill-opacity="0.7"/>
+      <rect x="50" y="98" width="10" height="10" rx="2" fill="#3E8BC6" fill-opacity="0.7"/>
+      <rect x="36" y="114" width="10" height="10" rx="2" fill="#3E8BC6" fill-opacity="0.5"/>
+      <rect x="50" y="114" width="10" height="10" rx="2" fill="#3E8BC6" fill-opacity="0.5"/>
+      <!-- Center tall building -->
+      <rect x="75" y="50" width="45" height="115" rx="4" fill="white"/>
+      <rect x="88" y="40" width="18" height="18" rx="3" fill="white"/>
+      <rect x="93" y="32" width="8" height="12" rx="2" fill="#FB923C"/>
+      <!-- Center windows -->
+      <rect x="82" y="58" width="10" height="12" rx="2" fill="#3E8BC6" fill-opacity="0.7"/>
+      <rect x="97" y="58" width="10" height="12" rx="2" fill="#3E8BC6" fill-opacity="0.7"/>
+      <rect x="82" y="78" width="10" height="12" rx="2" fill="#3E8BC6" fill-opacity="0.5"/>
+      <rect x="97" y="78" width="10" height="12" rx="2" fill="#3E8BC6" fill-opacity="0.5"/>
+      <rect x="82" y="98" width="10" height="12" rx="2" fill="#3E8BC6" fill-opacity="0.4"/>
+      <rect x="97" y="98" width="10" height="12" rx="2" fill="#3E8BC6" fill-opacity="0.4"/>
+      <rect x="82" y="118" width="10" height="12" rx="2" fill="#3E8BC6" fill-opacity="0.3"/>
+      <rect x="97" y="118" width="10" height="12" rx="2" fill="#3E8BC6" fill-opacity="0.3"/>
+      <!-- Door -->
+      <rect x="89" y="140" width="16" height="25" rx="8" fill="#2D9D6E"/>
+      <!-- Right building -->
+      <rect x="130" y="100" width="40" height="65" rx="4" fill="white" fill-opacity="0.9"/>
+      <rect x="136" y="108" width="10" height="10" rx="2" fill="#3E8BC6" fill-opacity="0.6"/>
+      <rect x="152" y="108" width="10" height="10" rx="2" fill="#3E8BC6" fill-opacity="0.6"/>
+      <rect x="136" y="124" width="10" height="10" rx="2" fill="#3E8BC6" fill-opacity="0.4"/>
+      <rect x="152" y="124" width="10" height="10" rx="2" fill="#3E8BC6" fill-opacity="0.4"/>
+      <!-- Right small building -->
+      <rect x="175" y="115" width="22" height="50" rx="4" fill="white" fill-opacity="0.75"/>
+      <!-- Donation box -->
+      <rect x="70" y="150" width="60" height="22" rx="6" fill="#FB923C"/>
+      <rect x="90" y="145" width="18" height="8" rx="3" fill="#EA6D2F"/>
+      <!-- Ground -->
+      <rect x="20" y="165" width="180" height="12" rx="6" fill="#2D9D6E" fill-opacity="0.8"/>
+      <!-- Text -->
+      <text x="110" y="198" text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="700" font-size="18" fill="white" fill-opacity="0.9">STD</text>
+    </svg>
+  </div>
+
+  <h1 class="hero-title">
+    Small Town<br><span class="accent">Donations</span>
+  </h1>
+  <p class="hero-subtitle">
+    Donate stuff you don't need. We sell it on eBay. Kids vote on which charity gets the money. It's that simple!
+  </p>
+  <div class="hero-ctas">
+    <a href="#nominate" class="btn btn-orange">🎁 Donate an Item</a>
+    <a href="#charity" class="btn btn-green">🗳️ Vote Now</a>
+    <a href="#about" class="btn btn-outline">Learn More</a>
+  </div>
+
+  <div class="impact-ticker">
+    <div class="ticker-item">
+      <div class="ticker-number" data-target="127">0</div>
+      <div class="ticker-label">Items Donated</div>
+    </div>
+    <div class="ticker-item">
+      <div class="ticker-number" data-target="2450">0</div>
+      <div class="ticker-label">$ Raised</div>
+    </div>
+    <div class="ticker-item">
+      <div class="ticker-number" data-target="8">0</div>
+      <div class="ticker-label">Charities Helped</div>
+    </div>
+    <div class="ticker-item">
+      <div class="ticker-number" data-target="89">0</div>
+      <div class="ticker-label">Kid Voters</div>
+    </div>
+  </div>
+</section>
+
+<!-- Charity of the Month -->
+<section class="charity-section" id="charity">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-tag">February 2026</div>
+      <h2 class="section-title">Charity of the <span class="orange">Month</span></h2>
+      <p class="section-desc">Every month, kids vote for the charity that gets our donation money. Here's who's winning hearts this month!</p>
+    </div>
+
+    <div class="charity-spotlight reveal">
+      <div class="charity-card">
+        <div class="charity-badge">🏆 Current Champion</div>
+        <h3 class="charity-name">Save the Dolphins Foundation</h3>
+        <p class="charity-desc">They rescue dolphins and other sea animals that are sick or hurt, and they teach people how to keep the ocean clean. Every dollar helps save another dolphin!</p>
+        <div class="charity-progress">
+          <div class="progress-header">
+            <span>Raised so far</span>
+            <span>$340 / $500 goal</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill"></div>
+          </div>
+        </div>
+        <a href="#" class="btn btn-green" style="font-size:0.9rem; padding: 0.7rem 1.5rem;">🐬 Learn More</a>
+      </div>
+
+      <div class="nominate-box" id="nominate">
+        <h3>📢 Nominate a Charity!</h3>
+        <p>Know an awesome charity that should be on next month's ballot? Tell us about it!</p>
+        <div class="form-group">
+          <label>Charity Name</label>
+          <input type="text" placeholder="e.g. Save the Pandas">
+        </div>
+        <div class="form-group">
+          <label>What do they do?</label>
+          <textarea placeholder="Tell us why this charity is awesome..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Their website</label>
+          <input type="url" placeholder="https://...">
+        </div>
+        <div class="form-group">
+          <label>Your name</label>
+          <input type="text" placeholder="Your name">
+        </div>
+        <button class="btn btn-orange" style="width:100%; justify-content: center; margin-top: 0.5rem;" onclick="fireConfetti(this)">
+          🚀 Submit Nomination
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About Us -->
+<section class="about-section" id="about">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-tag">Who We Are</div>
+      <h2 class="section-title">About <span class="green">Our Club</span></h2>
+    </div>
+
+    <div class="about-grid reveal">
+      <div class="about-text">
+        <p>Small Town Donations started with a simple idea: what if kids could decide where charity money goes? We collect donated items from our community, sell them on eBay, and then let kids vote on which charity gets the money each month.</p>
+        <p>We believe that even small towns can make a big difference. Every toy, book, or gadget someone doesn't need anymore can become a donation that changes lives. And by letting kids vote, we're teaching the next generation that their voice matters.</p>
+        <p>Our club is run by three awesome founders who care about making the world a little better, one donation at a time.</p>
+      </div>
+
+      <div class="founders-grid">
+        <div class="founder-card">
+          <div class="founder-avatar blue">LB</div>
+          <div class="founder-info">
+            <h4>Luna Barocas</h4>
+            <div class="role">Co-Founder & Head of Ideas</div>
+            <div class="bio">Luna came up with the whole idea for Small Town Donations. She loves finding creative ways to help people and make her community stronger.</div>
+          </div>
+        </div>
+        <div class="founder-card">
+          <div class="founder-avatar green">RK</div>
+          <div class="founder-info">
+            <h4>Rona Keini-Shaul</h4>
+            <div class="role">Co-Founder & Head of Charities</div>
+            <div class="bio">Rona researches all the charities and makes sure they're doing great work. She picks the best ones for each month's vote.</div>
+          </div>
+        </div>
+        <div class="founder-card">
+          <div class="founder-avatar orange">HL</div>
+          <div class="founder-info">
+            <h4>Huxley Lewis</h4>
+            <div class="role">Co-Founder & Head of Operations</div>
+            <div class="bio">Huxley keeps everything running smoothly. From organizing donations to managing eBay sales, he makes sure the wheels keep turning.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VIPs -->
+<section class="vip-section" id="vips">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-tag">Hall of Fame</div>
+      <h2 class="section-title">Our <span style="color: var(--orange-light)">VIPs</span></h2>
+      <p class="section-desc">These amazing people have gone above and beyond for Small Town Donations. Top donors, super volunteers, and community champions!</p>
+    </div>
+
+    <div class="vip-grid reveal">
+      <div class="vip-card">
+        <span class="vip-star">⭐</span>
+        <div class="vip-name">The Garcia Family</div>
+        <div class="vip-role">Top Donors · 14 items</div>
+      </div>
+      <div class="vip-card">
+        <span class="vip-star">🌟</span>
+        <div class="vip-name">Ms. Patterson</div>
+        <div class="vip-role">Teacher Champion · Spread the word</div>
+      </div>
+      <div class="vip-card">
+        <span class="vip-star">💫</span>
+        <div class="vip-name">Coach Williams</div>
+        <div class="vip-role">Super Volunteer · Setup crew</div>
+      </div>
+      <div class="vip-card">
+        <span class="vip-star">🏅</span>
+        <div class="vip-name">Sam & Riley M.</div>
+        <div class="vip-role">Most Votes Cast · Never miss a month</div>
+      </div>
+      <div class="vip-card">
+        <span class="vip-star">🎖️</span>
+        <div class="vip-name">Elmwood Book Club</div>
+        <div class="vip-role">Group MVP · 22 book donations</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Charities We Support -->
+<section class="charities-section" id="charities">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-tag">Making a Difference</div>
+      <h2 class="section-title">Charities We <span class="orange">Support</span></h2>
+      <p class="section-desc">Every charity on this list was voted for by kids in our community. Here are the organizations we've helped so far!</p>
+    </div>
+
+    <div class="charities-grid reveal">
+      <div class="charity-support-card">
+        <div class="charity-support-icon">🐬</div>
+        <div class="charity-support-name">Save the Dolphins Foundation</div>
+        <div class="charity-support-desc">Rescuing sea animals and cleaning up the ocean, one beach at a time.</div>
+        <div class="charity-month-tag">February 2026 · Current</div>
+      </div>
+      <div class="charity-support-card">
+        <div class="charity-support-icon">📚</div>
+        <div class="charity-support-name">Books for Every Kid</div>
+        <div class="charity-support-desc">Making sure every kid has books to read at home, no matter what.</div>
+        <div class="charity-month-tag">January 2026</div>
+      </div>
+      <div class="charity-support-card">
+        <div class="charity-support-icon">🐕</div>
+        <div class="charity-support-name">Paws & Claws Rescue</div>
+        <div class="charity-support-desc">Finding forever homes for dogs and cats who need families.</div>
+        <div class="charity-month-tag">December 2025</div>
+      </div>
+      <div class="charity-support-card">
+        <div class="charity-support-icon">🌳</div>
+        <div class="charity-support-name">Plant a Tree Project</div>
+        <div class="charity-support-desc">Planting trees in neighborhoods that need more green spaces.</div>
+        <div class="charity-month-tag">November 2025</div>
+      </div>
+      <div class="charity-support-card">
+        <div class="charity-support-icon">🍎</div>
+        <div class="charity-support-name">Community Food Bank</div>
+        <div class="charity-support-desc">Providing healthy meals to families in our town who need a helping hand.</div>
+        <div class="charity-month-tag">October 2025</div>
+      </div>
+      <div class="charity-support-card">
+        <div class="charity-support-icon">🎨</div>
+        <div class="charity-support-name">Art Supplies for Schools</div>
+        <div class="charity-support-desc">Getting paint, clay, and craft supplies into classrooms that can't afford them.</div>
+        <div class="charity-month-tag">September 2025</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Small<span>Town</span>Donations</div>
+    <ul class="footer-links">
+      <li><a href="#charity">Charity of the Month</a></li>
+      <li><a href="#about">About Us</a></li>
+      <li><a href="#vips">VIPs</a></li>
+      <li><a href="#charities">Charities</a></li>
+      <li><a href="#nominate">Nominate</a></li>
+    </ul>
+    <div class="footer-copy">
+      © 2026 Small Town Donations · Founded by Luna, Rona & Huxley · Making small towns mighty 💪
+    </div>
+  </div>
+</footer>
+
+<script>
+// Counter animation
+function animateCounters() {
+  document.querySelectorAll('.ticker-number').forEach(el => {
+    const target = parseInt(el.dataset.target);
+    const prefix = el.parentElement.querySelector('.ticker-label').textContent.includes('$') ? '' : '';
+    let current = 0;
+    const increment = Math.max(1, Math.floor(target / 60));
+    const isMoneyLabel = el.parentElement.querySelector('.ticker-label').textContent.includes('$');
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        current = target;
+        clearInterval(timer);
+      }
+      el.textContent = (isMoneyLabel ? '$' : '') + current.toLocaleString();
+    }, 30);
+  });
+}
+
+// Scroll reveal
+const revealElements = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.15 });
+revealElements.forEach(el => revealObserver.observe(el));
+
+// Start counters when hero is visible
+const heroObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animateCounters();
+      heroObserver.disconnect();
+    }
+  });
+}, { threshold: 0.3 });
+heroObserver.observe(document.querySelector('.hero'));
+
+// Confetti on form submit
+function fireConfetti(btn) {
+  const colors = ['#3E8BC6', '#2D9D6E', '#FB923C', '#EA6D2F', '#62B6E7', '#4ADE80'];
+  const rect = btn.getBoundingClientRect();
+  const originX = rect.left + rect.width / 2;
+  const originY = rect.top;
+
+  for (let i = 0; i < 40; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = originX + 'px';
+    piece.style.top = originY + 'px';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    piece.style.width = (6 + Math.random() * 8) + 'px';
+    piece.style.height = (6 + Math.random() * 8) + 'px';
+    document.body.appendChild(piece);
+
+    const angle = (Math.random() - 0.5) * Math.PI;
+    const velocity = 200 + Math.random() * 400;
+    const vx = Math.sin(angle) * velocity;
+    const vy = -Math.abs(Math.cos(angle)) * velocity;
+    const rotation = Math.random() * 720 - 360;
+
+    piece.animate([
+      { opacity: 1, transform: 'translate(0, 0) rotate(0deg)' },
+      { opacity: 0, transform: `translate(${vx}px, ${vy + 600}px) rotate(${rotation}deg)` }
+    ], {
+      duration: 1000 + Math.random() * 800,
+      easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+    }).onfinish = () => piece.remove();
+  }
+
+  // Button feedback
+  const origText = btn.innerHTML;
+  btn.innerHTML = '🎉 Submitted!';
+  btn.style.background = 'var(--green-mid)';
+  setTimeout(() => {
+    btn.innerHTML = origText;
+    btn.style.background = '';
+  }, 2500);
+}
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>
